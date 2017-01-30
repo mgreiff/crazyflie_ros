@@ -195,6 +195,13 @@ void Crazyflie::sendTrajectoryPacket(
   sendPacket((const uint8_t*)&trajectory, sizeof(trajectory)); 
 }
 
+// Emergency ping - raises assertion in the crazyflie and shuts down system
+void Crazyflie::sendEmergencyPacket()
+{
+  emergencyPacket packet(0xFF);
+  sendPacket((const uint8_t*)&packet, sizeof(packet));
+}
+
 void Crazyflie::sendPing()
 {
   uint8_t ping = 0xFF;

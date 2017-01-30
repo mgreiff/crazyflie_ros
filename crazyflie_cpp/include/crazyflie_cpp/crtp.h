@@ -382,7 +382,7 @@ struct crtpExternalPositionUpdate
   float z;
 }  __attribute__((packed));
 
-// Port 0x07 (Control)
+// Port 0x07 (Control and emergency)
 
 extern uint16_t single2half(float number);
 
@@ -545,6 +545,19 @@ struct crtpSynchronizationPacket {
   uint16_t time1;
   uint16_t time2;
   uint16_t time3;
+} __attribute__((packed));
+
+// Port 0x09 (emergency)
+struct emergencyPacket{
+  emergencyPacket(
+    uint8_t mode
+  )
+  : header(0x09,0),
+  mode(mode)
+  {
+  }
+  const crtp header;
+  uint8_t mode;
 } __attribute__((packed));
 
 // Port 13 (Platform)

@@ -407,11 +407,6 @@ private:
     std::chrono::duration<double> elapsedSeconds = end-start;
     ROS_INFO("Elapsed: %f s", elapsedSeconds.count());
 
-    // Send 0 thrust initially for thrust-lock
-    for (int i = 0; i < 100; ++i) {
-       m_cf.sendSetpoint(0, 0, 0, 0);
-    }
-
     while(!m_isEmergency) {
       // make sure we ping often enough to stream data out
       if (m_enableLogging &&
@@ -432,7 +427,12 @@ private:
       std::this_thread::sleep_for(std::chrono::milliseconds(1));
     }
 
-    // Make sure we turn the engines off
+    // Send 0 thrust initially for thrust-lock (regular mode)
+    for (int i = 0; i < 100; ++i) {
+       m_cf.sendSetpoint(0, 0, 0, 0);
+    }
+
+    // Make sure we turn the engines off (Mike mode)
     for (int i = 0; i < 100; ++i) {
        m_cf.sendFullControl(false,
         0, 0, 0, 0,
@@ -440,7 +440,10 @@ private:
         0, 0, 0, 0,
         0, 0);
     }
-
+    for (int i = 0; i < 100; ++i) {
+       m_cf.sendEmergencyPacket();
+    }
+    ROS_INFO("Called emergency properly.");
   }
 
   void onImuData(uint32_t time_in_ms, logImu* data) {

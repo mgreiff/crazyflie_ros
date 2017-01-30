@@ -115,6 +115,9 @@ public:
     float zpos, float zvel, float zacc, float zjerk,
     float yawpos, float yawvel);
 
+  // An emergency request
+  void sendEmergencyPacket();
+
   void sendPing();
 
   void reboot();
